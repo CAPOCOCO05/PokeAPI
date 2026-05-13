@@ -1,21 +1,33 @@
 import { useEffect, useState } from 'react';
-import { getPokemonList } from './services/pokemonService';
-import type { Pokemon } from './types/pokemon';
+import { getPokemonWithDetails } from './services/pokemonService';
+import type { PokemonDetail } from './types/pokemon';
 
 function App() {
-  const [list, setList] = useState<Pokemon[]>([]);
+  const [list, setList] = useState<PokemonDetail[]>([]);
 
   useEffect(() => {
-    getPokemonList(20).then(setList);
+    getPokemonWithDetails(20)
+      .then(data => setList(data))
+      .catch(err => console.error("Error:", err))
   }, []);
 
+
   return (
-    <div>
-      <h1>Pokédex Clase 1</h1>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
-        {list.map((p) => (
-          <div key={p.nombre} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
-            <p>{p.nombre.toUpperCase()}</p>
+    <div style={{ padding: '20px' }}>
+      <h1 style={{ textAlign: 'center' }}>POKEMONES</h1>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '15px' }}>
+        {list.map((pokemon) => (
+          <div key={pokemon.id} style={{ border: '1px solid #ccc', borderRadius: '10px', textAlign: 'center', padding: '10px' }}>
+            <p>#{pokemon.id}</p>
+            <img src={pokemon.sprites.front_default} alt={pokemon.name} />
+            <h3>{pokemon.name}</h3>
+            <div>
+              {pokemon.types.map(t => (
+                <span key={t.type.name} style={{ margin: '0 5px', fontSize: '0.8em' }}>
+                  {t.type.name}
+                </span>
+              ))}
+            </div>
           </div>
         ))}
       </div>

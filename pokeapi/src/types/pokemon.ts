@@ -1,15 +1,21 @@
-export interface Pokemon {
-  nombre: string;
+export interface PokemonBase {
+  name: string;
   url: string;
 }
 
-export interface PokemonResponse {
-  resultado: Pokemon[];
+export interface PokemonListResponse {
+  results: PokemonBase[];
 }
 
-export interface PokemonSimpleDetails {
+export interface PokemonDetail {
   id: number;
-  nombre: string;
-  imagen: string;
-  types: string[];
+  name: string;
+  sprites: {
+    front_default: string;
+  };
+  types: {
+    type: {
+      name: string;
+    };
+  }[];
 }
