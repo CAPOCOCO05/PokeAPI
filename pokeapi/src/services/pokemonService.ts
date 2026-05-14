@@ -13,3 +13,4 @@ export const getPokemonWithDetails = async (limit: number = 20) => {
   
   return detailsResponses.map(res => res.data);
 };
+

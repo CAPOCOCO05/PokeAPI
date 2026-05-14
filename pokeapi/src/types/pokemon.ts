@@ -1,3 +1,5 @@
+import type { Ability } from "./poke";
+
 export interface PokemonBase {
   name: string;
   url: string;
@@ -16,6 +18,12 @@ export interface PokemonDetail {
   types: {
     type: {
       name: string;
+      
     };
   }[];
+  weight: number;
+  abilities: Ability[];
+  height: number;
+  base_experience: number;
 }
+
