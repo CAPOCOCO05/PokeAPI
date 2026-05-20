@@ -1,4 +1,3 @@
-import type { Ability } from "./poke";
 
 export interface PokemonBase {
   name: string;
@@ -7,23 +6,5 @@ export interface PokemonBase {
 
 export interface PokemonListResponse {
   results: PokemonBase[];
-}
-
-export interface PokemonDetail {
-  id: number;
-  name: string;
-  sprites: {
-    front_default: string;
-  };
-  types: {
-    type: {
-      name: string;
-      
-    };
-  }[];
-  weight: number;
-  abilities: Ability[];
-  height: number;
-  base_experience: number;
 }
 

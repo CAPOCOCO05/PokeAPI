@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import type { PokemonDetail } from '../types/pokemon';
+import type { PokemonInterface } from '../types/poke';
 
-export default function PokemonDetailView() {
+export default function PokeDetalles() {
   const { id } = useParams(); 
-  const [pokemon, setPokemon] = useState<PokemonDetail | null>(null);
+  const [pokemon, setPokemon] = useState<PokemonInterface | null>(null);
 
   useEffect(() => {
     axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
