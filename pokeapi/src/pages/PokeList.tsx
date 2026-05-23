@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PokeCard from '../components/PokeCard';
 import type { PokemonInterface } from '../types/poke';
 import { TiposDePokemones } from '../services/pokemonService';
+import { useNavigate } from 'react-router-dom';
 
 interface PokemonListProps {
   list: PokemonInterface[];
@@ -12,6 +13,8 @@ export const PokeList = ({ list }: PokemonListProps) => {
   const [displayedPokemon, setDisplayedPokemon] = useState<PokemonInterface[]>(list);
   const [types, setTypes] = useState<{ name: string; url: string }[]>([]);
   const [selectedType, setSelectedType] = useState<string>('');
+  const [verSoloFavoritos, setVerSoloFavoritos] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     TiposDePokemones()
@@ -21,6 +24,12 @@ export const PokeList = ({ list }: PokemonListProps) => {
 
   useEffect(() => {
     let filtered = [...list];
+
+    if(verSoloFavoritos){
+      const savedFavorites = localStorage.getItem('pokedex_favorites');
+      const favoriteIds = savedFavorites ? JSON.parse(savedFavorites) : [];
+      filtered = filtered.filter(pokemon => favoriteIds.includes(pokemon.id));
+    }
 
     // filtro por tipo
     if (selectedType !== '') {
@@ -37,13 +46,24 @@ export const PokeList = ({ list }: PokemonListProps) => {
     }
 
     setDisplayedPokemon(filtered);
-  }, [searchTerm, selectedType, list]);
+  }, [searchTerm, selectedType, list, verSoloFavoritos]);
 
   return (
     <div>
-        <h1 style={{ textAlign: 'center' }}>POKEMONES</h1>
+      <h1 style={{ textAlign: 'center' }}>POKEMONES</h1>
 
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+
+          <button onClick={() => navigate('/comparador')} style={{ backgroundColor: '#e46bb3d2', borderRadius: '4px', marginRight: '10px' }}>
+            Comparador
+          </button>
+          
+          <button onClick={() => {
+            setVerSoloFavoritos(!verSoloFavoritos);
+            }} style={{ backgroundColor: '#fb9dd5d2', borderRadius: '4px' }}>
+            Mis Favoritos
+          </button>
+          
         <select 
           value={selectedType}
           onChange={(e) => setSelectedType(e.target.value)}
@@ -69,7 +89,7 @@ export const PokeList = ({ list }: PokemonListProps) => {
         <p style={{ textAlign: 'center', color: '#666' }}>No se encontro al pokemon</p>
       )}
         
-        <PokeCard list={displayedPokemon} />
+      <PokeCard list={displayedPokemon} />
       
     </div>
   );
